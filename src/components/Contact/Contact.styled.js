@@ -20,6 +20,10 @@ export const StyledContact = styled.li`
     font-size: 14px;
   }
 
+  a{
+    color: black;
+  }
+
   button {
     width: 18px;
     height: 18px;

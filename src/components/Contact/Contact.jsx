@@ -4,10 +4,12 @@ import { StyledContact } from './Contact.styled';
 const Contact = ({ contactItemData, onDeleteContact }) => {
   return (
     <StyledContact>
+      <a href={`tel:+${contactItemData.number}`}>
       <p>
         👤&nbsp;&nbsp;{contactItemData.name}:{' '}
         <span>{contactItemData.number}</span>
       </p>
+      </a>
       <button type="button" onClick={() => onDeleteContact(contactItemData.id)}>
         ✕
       </button>
