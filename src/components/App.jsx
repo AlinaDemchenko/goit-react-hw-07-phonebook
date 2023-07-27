@@ -1,29 +1,48 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact, deleteContact, setFilter } from 'redux/Slice';
+import { setFilter } from 'redux/slice';
+import { getContactsThunk, addContactThunk, deleteContactThunk } from 'redux/operations'; 
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 import Form from './Form/Form';
 import ContactList from './ContactList/ContactList';
 import Section from './Section/Section';
 import Filter from './Filter/Filter';
+import Loader from './Loader/Loader';
+import Notification from './Notification/Notification';
 
 export function App() {
-  const contacts = useSelector(state => state.contacts);
+  const {items} = useSelector(state => state.contacts);
+  const {isLoading} = useSelector(state => state.contacts);
   const filterValue = useSelector(state => state.filter);
-  
+  const error = useSelector(state => state.contacts.error);
+ 
   const dispatch = useDispatch();
 
+  useEffect(()=>{
+    dispatch(getContactsThunk())
+//     .unwrap().catch((error)=>{
+// toast.error(error.message);
+    // })
+  },[dispatch]);
+
+  useEffect(()=>{
+if(!error) return;
+toast.error(error);
+  }, [error])
+
   const onDeleteContact = id => {
-    dispatch(deleteContact(id));
+    dispatch(deleteContactThunk(id));
   };
 
   const onAddContact = contactData => {
-    const checkedContact = contacts.find(
+    const checkedContact = items.find(
       contact => contactData.name === contact.name
     );
     if (checkedContact) {
-      alert(`${contactData.name} is already in contacts`);
+      toast.info(`${contactData.name} is already in your contacts`);
       return;
     } else {
-      dispatch(addContact(contactData));
+      dispatch(addContactThunk(contactData));
     }
   };
 
@@ -31,7 +50,7 @@ export function App() {
    dispatch(setFilter(filterData));
   };
 
-  const filteredContacts = contacts.filter(contact =>
+  const filteredContacts = items.filter(contact =>
     contact.name
       .toLowerCase()
       .includes(filterValue.toLowerCase().trim()));
@@ -44,12 +63,14 @@ export function App() {
       <Form onAddContact={onAddContact} />
       <h2>Contacts</h2>
       <Filter onFilter={onFilter} filter={filterValue} />
-      {contacts.length > 0 && (
+      {isLoading && <Loader/>}
+      {items.length > 0 && !isLoading && (
         <ContactList
           contacts={filteredContacts}
           onDeleteContact={onDeleteContact}
         />
       )}
+      <Notification/>
     </Section>
   );
 }
