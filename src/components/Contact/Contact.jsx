@@ -5,7 +5,8 @@ const Contact = ({ contactItemData, onDeleteContact }) => {
   return (
     <StyledContact>
       <p>
-       👤&nbsp;&nbsp;{contactItemData.name}: <span>{contactItemData.number}</span>
+        👤&nbsp;&nbsp;{contactItemData.name}:{' '}
+        <span>{contactItemData.number}</span>
       </p>
       <button type="button" onClick={() => onDeleteContact(contactItemData.id)}>
         ✕

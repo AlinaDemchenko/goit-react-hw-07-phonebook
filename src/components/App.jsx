@@ -1,12 +1,19 @@
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { useEffect } from 'react';
 import { setFilter } from 'redux/slice';
 import {
   getContactsThunk,
   addContactThunk,
   deleteContactThunk,
 } from 'redux/operations';
-import { useEffect } from 'react';
-import { toast } from 'react-toastify';
+import {
+  selectContacts,
+  selectError,
+  selectFilter,
+  selectFilteredContacts,
+  selectLoading,
+} from 'redux/selectors';
 import Form from './Form/Form';
 import ContactList from './ContactList/ContactList';
 import Section from './Section/Section';
@@ -15,10 +22,10 @@ import Loader from './Loader/Loader';
 import Notification from './Notification/Notification';
 
 export function App() {
-  const { items } = useSelector(state => state.contacts);
-  const { isLoading } = useSelector(state => state.contacts);
-  const filterValue = useSelector(state => state.filter);
-  const error = useSelector(state => state.contacts.error);
+  const items = useSelector(selectContacts);
+  const isLoading = useSelector(selectLoading);
+  const filterValue = useSelector(selectFilter);
+  const error = useSelector(selectError);
 
   const dispatch = useDispatch();
 
@@ -54,9 +61,7 @@ export function App() {
     dispatch(setFilter(filterData));
   };
 
-  const filteredContacts = items.filter(contact =>
-    contact.name.toLowerCase().includes(filterValue.toLowerCase().trim())
-  );
+  const filteredContacts = useSelector(selectFilteredContacts);
 
   return (
     <Section>

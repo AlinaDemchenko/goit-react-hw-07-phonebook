@@ -17,7 +17,7 @@ const Form = ({ onAddContact }) => {
       <label>
         <span>Name:</span>
         <input
-        className='name'
+          className="name"
           type="text"
           name="name"
           pattern="^[a-zA-Zа-яА-Я]+(([' \-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
