@@ -35,26 +35,22 @@ const contactsSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addCase(getContactsThunk.pending, handlePending)
       .addCase(getContactsThunk.fulfilled, (state, action) => {
         state.contacts.isLoading = false;
         state.contacts.items = action.payload;
       })
-      .addCase(getContactsThunk.rejected, handleRejected)
-      .addCase(addContactThunk.pending, handlePending)
       .addCase(addContactThunk.fulfilled, (state, action) => {
         state.contacts.isLoading = false;
         state.contacts.items.push(action.payload);
       })
-      .addCase(addContactThunk.rejected, handleRejected)
-      .addCase(deleteContactThunk.pending, handlePending)
       .addCase(deleteContactThunk.fulfilled, (state, action) => {
         state.contacts.isLoading = false;
         state.contacts.items = state.contacts.items.filter(
           contact => contact.id !== action.payload.id
         );
       })
-      .addCase(deleteContactThunk.rejected, handleRejected);
+   .addMatcher((action)=> action.type.endsWith('/pending'), handlePending)
+   .addMatcher((action)=> action.type.endsWith('/rejected'), handleRejected)
   },
 });
 
