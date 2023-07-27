@@ -9,7 +9,6 @@ export const StyledContact = styled.li`
 
   p {
     display: inline-block;
-    width: 500px;
     height: 20px;
     margin: 0 40px 0 0;
     padding: 2px 20px 0;
@@ -20,7 +19,19 @@ export const StyledContact = styled.li`
     font-size: 14px;
   }
 
-  a{
+  @media only screen and (max-width: 499px) {
+    p {
+      width: 300px;
+    }
+  }
+
+  @media only screen and (min-width: 500px) {
+    p {
+      width: 500px;
+    }
+  }
+
+  a {
     color: black;
   }
 
