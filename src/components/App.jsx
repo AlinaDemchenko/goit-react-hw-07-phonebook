@@ -1,6 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { setFilter } from 'redux/slice';
-import { getContactsThunk, addContactThunk, deleteContactThunk } from 'redux/operations'; 
+import {
+  getContactsThunk,
+  addContactThunk,
+  deleteContactThunk,
+} from 'redux/operations';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import Form from './Form/Form';
@@ -11,24 +15,24 @@ import Loader from './Loader/Loader';
 import Notification from './Notification/Notification';
 
 export function App() {
-  const {items} = useSelector(state => state.contacts);
-  const {isLoading} = useSelector(state => state.contacts);
+  const { items } = useSelector(state => state.contacts);
+  const { isLoading } = useSelector(state => state.contacts);
   const filterValue = useSelector(state => state.filter);
   const error = useSelector(state => state.contacts.error);
- 
+
   const dispatch = useDispatch();
 
-  useEffect(()=>{
-    dispatch(getContactsThunk())
-//     .unwrap().catch((error)=>{
-// toast.error(error.message);
+  useEffect(() => {
+    dispatch(getContactsThunk());
+    //     .unwrap().catch((error)=>{
+    // toast.error(error.message);
     // })
-  },[dispatch]);
+  }, [dispatch]);
 
-  useEffect(()=>{
-if(!error) return;
-toast.error(error);
-  }, [error])
+  useEffect(() => {
+    if (!error) return;
+    toast.info(error);
+  }, [error]);
 
   const onDeleteContact = id => {
     dispatch(deleteContactThunk(id));
@@ -47,13 +51,12 @@ toast.error(error);
   };
 
   const onFilter = filterData => {
-   dispatch(setFilter(filterData));
+    dispatch(setFilter(filterData));
   };
 
   const filteredContacts = items.filter(contact =>
-    contact.name
-      .toLowerCase()
-      .includes(filterValue.toLowerCase().trim()));
+    contact.name.toLowerCase().includes(filterValue.toLowerCase().trim())
+  );
 
   return (
     <Section>
@@ -63,14 +66,14 @@ toast.error(error);
       <Form onAddContact={onAddContact} />
       <h2>Contacts</h2>
       <Filter onFilter={onFilter} filter={filterValue} />
-      {isLoading && <Loader/>}
+      {isLoading && <Loader />}
       {items.length > 0 && !isLoading && (
         <ContactList
           contacts={filteredContacts}
           onDeleteContact={onDeleteContact}
         />
       )}
-      <Notification/>
+      <Notification />
     </Section>
   );
 }

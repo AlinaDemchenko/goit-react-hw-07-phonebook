@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-// import { toast } from 'react-toastify';
 
 import {
   getContactsThunk,
@@ -16,7 +15,7 @@ const initialState = {
   filter: '',
 };
 
-const handlePending = (state) => {
+const handlePending = state => {
   state.contacts.isLoading = true;
   state.contacts.error = null;
 };
@@ -24,7 +23,6 @@ const handlePending = (state) => {
 const handleRejected = (state, { error }) => {
   state.contacts.isLoading = false;
   state.contacts.error = error.message;
-  // toast.info(contacts.error);
 };
 
 const contactsSlice = createSlice({
@@ -55,7 +53,7 @@ const contactsSlice = createSlice({
         state.contacts.items = state.contacts.items.filter(
           contact => contact.id !== action.payload.id
         );
-       })
+      })
       .addCase(deleteContactThunk.rejected, handleRejected);
   },
 });
